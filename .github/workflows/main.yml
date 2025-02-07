@@ -26,11 +26,14 @@ jobs:
 
       - name: Verify SF CLI installation
         run: sf --version
-
+        
+      - name: Decode JWT Key File
+        run: echo "${{ secrets.SF_JWT_KEY }}" | base64 --decode > .github/keys/server.key
+      
       - name: Authenticate to Salesforce using JWT
         run: |
           sf org login jwt \
             --client-id ${{ secrets.CLIENT_ID }} \
-            --jwt-key-file ./server.key \
+            --jwt-key-file .github/keys/server.key \
             --username ${{ secrets.DEPLOY_USER }} \
             --instance-url ${{ vars.SF_INSTANCE_URL }}
