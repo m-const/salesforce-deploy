@@ -26,7 +26,7 @@ jobs:
 
       - name: Verify SF CLI installation
         run: sf --version
-        
+
       - name: Decode JWT Key File
         run: echo "${{ secrets.SF_JWT_KEY }}" | base64 --decode > .github/keys/server.key
       
@@ -37,3 +37,8 @@ jobs:
             --jwt-key-file .github/keys/server.key \
             --username ${{ secrets.DEPLOY_USER }} \
             --instance-url ${{ vars.SF_INSTANCE_URL }}
+      - name: Clean up private key
+        if: always() 
+        run: |
+          rm -f .github/keys/server.key
+          echo "Private key deleted successfully."
