@@ -30,7 +30,7 @@ jobs:
       - name: Authenticate to Salesforce using JWT
         run: |
           sf org login jwt \
-            --client-id ${{ secrets.SF_CLIENT_ID }} \
+            --client-id ${{ secrets.CLIENT_ID }} \
             --jwt-key-file ./server.key \
-            --username ${{ secrets.SF_USERNAME }} \
-            --instance-url ${{ secrets.SF_INSTANCE_URL }}
+            --username ${{ secrets.DEPLOY_USER }} \
+            --instance-url ${{ vars.SF_INSTANCE_URL }}
