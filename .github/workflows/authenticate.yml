@@ -1,32 +1,10 @@
-name: SF CLI JWT Login
+name: "SF CLI JWT Login"
 
-on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+description: "Authenticates to SF Environment using JWT"
 
-jobs:
-  sf-cli-login:
-    runs-on: ubuntu-latest
-    environment: Prod  # Use the "Prod" environment to fetch secrets
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install Node.js and npm
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Salesforce CLI
-        run: |
-          npm install --global @salesforce/cli
-
-      - name: Verify SF CLI installation
-        run: sf --version
-
+runs:
+  using: "composite"
+  steps:
       - name: Decode JWT Key File
         run: echo "${{ secrets.SF_JWT_KEY }}" | base64 --decode > .github/keys/server.key
       
