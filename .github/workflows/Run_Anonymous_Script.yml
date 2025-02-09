@@ -1,4 +1,4 @@
-name: SF CLI Prepare Runner
+name: SF CLI Run Anonymous Script
 
 on:
   workflow_dispatch:
@@ -25,6 +25,6 @@ jobs:
         run: sf --version
 
       - name: Run Authenticate
-        uses: ./github/workflows/authenticate.yml
+        uses: ./github/actions/SF_JWT_Authenticate
 
       
