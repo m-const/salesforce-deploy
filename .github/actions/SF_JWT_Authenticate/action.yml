@@ -1,4 +1,4 @@
-name: "SF CLI JWT Login"
+name: "SF JWT Authenticate"
 
 description: "Authenticates to SF Environment using JWT"
 

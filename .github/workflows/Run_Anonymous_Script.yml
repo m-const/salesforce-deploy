@@ -25,6 +25,6 @@ jobs:
         run: sf --version
 
       - name: Run Authenticate
-        uses: ./github/actions/SF_JWT_Authenticate
+        uses: ./.github/actions/SF_JWT_Authenticate
 
       
