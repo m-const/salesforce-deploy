@@ -30,4 +30,5 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
+          SF_JWT_KEY: ${{secrets.SF_JWT_KEY}}
       

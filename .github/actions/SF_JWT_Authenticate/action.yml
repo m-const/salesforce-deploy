@@ -2,6 +2,20 @@ name: "SF JWT Authenticate"
 
 description: "Authenticates to SF Environment using JWT"
 
+inputs:
+  CLIENT_ID:
+    required: true
+    description: "Connected App Client Id"
+  DEPLOY_USER:
+    required: true
+    description: "User with permission granted to connected app"
+  SF_INSTANCE_URL:
+    required: true
+    description: "The Salesforce environment to authenticate to"
+  SF_JWT_KEY:
+    required: true
+    description: "The cert private key configured with the connected app"
+
 runs:
   using: "composite"
   steps:
