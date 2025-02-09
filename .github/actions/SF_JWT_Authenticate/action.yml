@@ -7,7 +7,7 @@ runs:
   steps:
       - name: Decode JWT Key File
         run: echo "${{ inputs.SF_JWT_KEY }}" | base64 --decode > .github/keys/server.key
-      
+        shell: bash
       - name: Authenticate to Salesforce using JWT
         run: |
           sf org login jwt \
@@ -15,8 +15,10 @@ runs:
             --jwt-key-file .github/keys/server.key \
             --username ${{ inputs.DEPLOY_USER }} \
             --instance-url ${{ inputs.SF_INSTANCE_URL }}
+        shell: bash
       - name: Clean up private key
         if: always() 
         run: |
           rm -f .github/keys/server.key
           echo "Private key deleted successfully."
+        shell: bash
