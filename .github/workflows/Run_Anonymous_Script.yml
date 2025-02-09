@@ -26,5 +26,8 @@ jobs:
 
       - name: Run Authenticate
         uses: ./.github/actions/SF_JWT_Authenticate
-
+        with:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
       

@@ -11,10 +11,10 @@ runs:
       - name: Authenticate to Salesforce using JWT
         run: |
           sf org login jwt \
-            --client-id ${{ secrets.CLIENT_ID }} \
+            --client-id ${{ inputs.CLIENT_ID }} \
             --jwt-key-file .github/keys/server.key \
-            --username ${{ secrets.DEPLOY_USER }} \
-            --instance-url ${{ vars.SF_INSTANCE_URL }}
+            --username ${{ inputs.DEPLOY_USER }} \
+            --instance-url ${{ inputs.SF_INSTANCE_URL }}
       - name: Clean up private key
         if: always() 
         run: |
