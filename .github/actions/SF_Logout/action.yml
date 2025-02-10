@@ -1,0 +1,11 @@
+name: "SF Logout"
+
+description: "Logs out of the SF Org"
+
+
+runs:
+  using: "composite"
+  steps:
+      - name: SF Org Logout
+        run: sf org logout
+        shell: bash

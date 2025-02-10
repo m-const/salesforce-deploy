@@ -2,6 +2,19 @@ name: SF CLI Run Anonymous Script
 
 on:
   workflow_dispatch:
+    inputs:
+      target_script:
+        description: 'the script to run from ./scripts dir'
+        required: true
+        type: string
+      arg1:
+        description: 'First argument'
+        required: false
+        type: string
+      arg2:
+        description: 'Second argument'
+        required: false
+        type: string
 
 jobs:
   sf-cli-prepare-runner:
@@ -31,4 +44,15 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
           SF_JWT_KEY: ${{secrets.SF_JWT_KEY}}
-      
+
+      - name: Replace arg placeholders in ${{ github.event.inputs.target_script }} 
+        run: |
+         cp ./scripts/${{ github.event.inputs.target_script }} tmp_script.apex
+         sed -i "s/#ARG1#/${{ github.event.inputs.arg1 }}/g" tmp_script.apex
+         sed -i "s/#ARG2#/${{ github.event.inputs.arg2 }}/g" tmp_script.apex
+
+      - name: Run modified ${{ github.event.inputs.target_script }} script
+        run: sf apex run --file tmp_script.apex
+
+      - name: Run SF Org Logout
+        uses: ./.github/actions/SF_Logout
