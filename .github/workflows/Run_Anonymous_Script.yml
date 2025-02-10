@@ -56,3 +56,5 @@ jobs:
 
       - name: Run SF Org Logout
         uses: ./.github/actions/SF_Logout
+        with:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}

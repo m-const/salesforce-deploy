@@ -1,11 +1,14 @@
 name: "SF Logout"
 
 description: "Logs out of the SF Org"
-
+inputs:
+  DEPLOY_USER:
+    required: true
+    description: "User with permission granted to connected app"
 
 runs:
   using: "composite"
   steps:
       - name: SF Org Logout
-        run: sf org logout --no-prompt
+        run: sf org logout --target-org ${{ inputs.DEPLOY_USER }} --no-prompt
         shell: bash
