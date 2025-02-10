@@ -41,6 +41,7 @@ jobs:
         uses: ./.github/actions/SF_Project_Deploy
         with:
          DEPLOY_FOLDERS: ${{ github.event.inputs.deploy_folders }}
+         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
 
 
       - name: Run SF Org Logout
