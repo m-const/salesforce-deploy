@@ -26,6 +26,6 @@ runs:
           src_dirs='${{ steps.parse-src_dirs.outputs.src_dirs }}'
           echo "$src_dirs" | jq -r '.[]' | while read -r srcDir; do
             echo "Running $srcDir"
-            sf project deploy start  --source-dir "$srcDir" --target-org echo ${{ inputs.DEPLOY_USER }}
+            sf project deploy start  --source-dir "$srcDir" --target-org ${{ inputs.DEPLOY_USER }}
           done
         shell: bash
