@@ -52,7 +52,7 @@ jobs:
          sed -i "s/#ARG2#/${{ github.event.inputs.arg2 }}/g" tmp_script.apex
 
       - name: Run modified ${{ github.event.inputs.target_script }} script
-        run: sf apex run --file tmp_script.apex
+        run: sf apex run --target-org ${{ secrets.DEPLOY_USER }} --file tmp_script.apex
 
       - name: Run SF Org Logout
         uses: ./.github/actions/SF_Logout
