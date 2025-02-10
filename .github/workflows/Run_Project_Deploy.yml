@@ -1,0 +1,49 @@
+name: SF CLI Run Project Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_folders:
+        description: 'comma seperated list of deploy folders'
+        required: true
+        type: string
+
+jobs:
+  sf-cli-prepare-runner:
+    runs-on: ubuntu-latest
+    environment: Prod  # Use the "Prod" environment to fetch secrets
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Salesforce CLI
+        run: |
+          npm install --global @salesforce/cli
+
+      - name: Verify SF CLI installation
+        run: sf --version
+
+      - name: Run Authenticate
+        uses: ./.github/actions/SF_JWT_Authenticate
+        with:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
+          SF_JWT_KEY: ${{secrets.SF_JWT_KEY}}
+
+      - name: SF Project Deploy
+        uses: ./.github/actions/SF_Project_Deploy
+        with:
+         DEPLOY_FOLDERS: ${{ github.event.inputs.deploy_folders }}
+
+
+      - name: Run SF Org Logout
+        uses: ./.github/actions/SF_Logout
+        with:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}

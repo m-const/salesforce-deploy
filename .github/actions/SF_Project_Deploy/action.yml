@@ -1,0 +1,30 @@
+name: "SF Project Deploy"
+
+description: "Deploy deploy folders"
+
+inputs:
+  DEPLOY_USER:
+    required: true
+    description: "User with permission granted to connected app"
+  SF_INSTANCE_URL:
+    required: true
+    description: "The Salesforce environment to authenticate to"
+  DEPLOY_FOLDERS:
+    required: true
+    description: "The source folders to deploy. comma seperated list"
+
+runs:
+  using: "composite"
+  steps:
+      - name: Parse src_dirs names
+        id: parse-src_dirs
+        run: echo "::set-output name=src_dirs::$(echo ${{ github.event.inputs.DEPLOY_FOLDERS }} | tr -d ' ' | jq -R -c 'split(",")')"
+      
+      - name: Run src_dirs
+        run: |
+          src_dirs=${{ steps.parse-src_dirs.outputs.src_dirs }}
+          for srcDir in $(echo "$src_dirs" | jq -r '.[]'); do
+            echo "Running $srcDir"
+            sf project deploy start  --source-dir $srcDir --target-org ${{ github.event.inputs.DEPLOY_USER }}
+          done
+
