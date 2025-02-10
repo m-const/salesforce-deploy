@@ -7,5 +7,5 @@ runs:
   using: "composite"
   steps:
       - name: SF Org Logout
-        run: sf org logout
+        run: sf org logout --no-prompt
         shell: bash
