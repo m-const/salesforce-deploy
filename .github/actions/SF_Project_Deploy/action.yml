@@ -27,4 +27,4 @@ runs:
             echo "Running $srcDir"
             sf project deploy start  --source-dir $srcDir --target-org ${{ github.event.inputs.DEPLOY_USER }}
           done
-
+        shell: bash
