@@ -6,7 +6,7 @@
     },
     {
       "path": "src-sales",
-      "default": true
+      "default": false
     }
   ],
   "name": "deploy-sfcli-test",
