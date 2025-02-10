@@ -23,7 +23,7 @@ runs:
 
       - name: Run src_dirs
         run: |
-          src_dirs='${{ steps.parse-src_dirs.outputs.src_dirs }}
+          src_dirs='${{ steps.parse-src_dirs.outputs.src_dirs }}'
           echo "$src_dirs" | jq -r '.[]' | while read -r srcDir; do
             echo "Running $srcDir"
             sf project deploy start  --source-dir "$srcDir" --target-org ${{ github.event.inputs.DEPLOY_USER }}
