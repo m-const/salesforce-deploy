@@ -28,7 +28,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      - name: Var check
+        run: |
+          echo "SF_INSTANCE_KEY=$SF_INSTANCE_KEY"
+          echo "$SF_AUTH"
+          
       - name: Install Node.js and npm
         uses: actions/setup-node@v3
         with:
@@ -50,7 +54,7 @@ jobs:
         uses: ./.github/actions/SF_Map_Auth_Secret
         with:
           SF_AUTH: ${{ secrets.SF_AUTH }}
-          SF_INSTANCE_KEY: ${{inputs.SF_INSTANCE_KEY}}
+          SF_INSTANCE_KEY: ${{ inputs.SF_INSTANCE_KEY }}
 
       - name: Attempt JWT Authenticate
         if: steps.sf_auth.outputs.IS_JWT == 'true'
