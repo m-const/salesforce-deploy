@@ -15,8 +15,8 @@ on:
         description: 'Second argument'
         required: false
         type: string
-      SF_INSTANCE_URL:
-        description: 'the target SF Org URL as noted in Setup > My Domain > My Domain Details > Current My Domain URL'
+      SF_INSTANCE_KEY:
+        description: 'the target SF Org URL as noted in Setup > My Domain > My Domain Details > My Domain Name'
         required: true
         type: string
 
@@ -34,6 +34,10 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Install yq
+        run: |
+            sudo apt update && sudo apt install -y yq
+
       - name: Install Salesforce CLI
         run: |
           npm install --global @salesforce/cli
@@ -41,33 +45,41 @@ jobs:
       - name: Verify SF CLI installation
         run: sf --version
 
+      - name: Get Authentication Values from SF_AUTH secret
+        id: sf_auth
+        uses: ./.github/actions/SF_Map_Auth_Secret
+        with:
+          SF_AUTH: ${{ secrets.SF_AUTH }}
+          SF_INSTANCE_KEY: ${{inputs.SF_INSTANCE_KEY}}
+
       - name: Attempt JWT Authenticate
+        if: steps.sf_auth.outputs.IS_JWT == 'true'
         id: jwt_auth
         continue-on-error: true
         uses: ./.github/actions/SF_JWT_Authenticate
         with:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          SF_INSTANCE_URL: ${{ github.event.inputs.SF_INSTANCE_URL }}
+          CLIENT_ID: ${{ steps.sf_auth.outputs.SF_CLIENT_ID }}
+          DEPLOY_USER: ${{ steps.sf_auth.outputs.SF_USERNAME }}
+          SF_INSTANCE_URL: ${{ steps.sf_auth.outputs.SF_URL }}
           SF_JWT_KEY: ${{secrets.SF_JWT_KEY}}
 
       - name: Attempt Device Authenticate
         if: steps.jwt_auth.outcome == 'failure'
         uses: ./.github/actions/SF_Device_Authenticate
         with:
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          SF_INSTANCE_URL: ${{ github.event.inputs.SF_INSTANCE_URL }}
+          DEPLOY_USER: ${{ steps.sf_auth.outputs.SF_USERNAME }}
+          SF_INSTANCE_URL: ${{ steps.sf_auth.outputs.SF_URL }}
 
 
 
 
-      - name: Replace arg placeholders in ${{ github.event.inputs.target_script }} 
+      - name: Replace arg placeholders in ${{ inputs.target_script }} 
         run: |
-         cp ./scripts/${{ github.event.inputs.target_script }} tmp_script.apex
-         sed -i "s/#ARG1#/${{ github.event.inputs.arg1 }}/g" tmp_script.apex
-         sed -i "s/#ARG2#/${{ github.event.inputs.arg2 }}/g" tmp_script.apex
+         cp ./scripts/${{ inputs.target_script }} tmp_script.apex
+         sed -i "s/#ARG1#/${{ inputs.arg1 }}/g" tmp_script.apex
+         sed -i "s/#ARG2#/${{ inputs.arg2 }}/g" tmp_script.apex
 
-      - name: Run modified ${{ github.event.inputs.target_script }} script
+      - name: Run modified ${{ inputs.target_script }} script
         run: sf apex run --target-org ${{ secrets.DEPLOY_USER }} --file tmp_script.apex
 
       - name: Run SF Org Logout
