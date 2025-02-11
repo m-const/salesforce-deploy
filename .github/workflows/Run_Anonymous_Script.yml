@@ -37,13 +37,25 @@ jobs:
       - name: Verify SF CLI installation
         run: sf --version
 
-      - name: Run Authenticate
+      - name: Attempt JWT Authenticate
+        id: jwt_auth
+        continue-on-error: true
         uses: ./.github/actions/SF_JWT_Authenticate
         with:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
           SF_JWT_KEY: ${{secrets.SF_JWT_KEY}}
+
+      - name: Attempt Device Authenticate
+        if: steps.jwt_auth.outcome == 'failure'
+        uses: ./.github/actions/SF_Device_Authenticate
+        with:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
+
+
+
 
       - name: Replace arg placeholders in ${{ github.event.inputs.target_script }} 
         run: |

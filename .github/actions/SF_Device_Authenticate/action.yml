@@ -1,0 +1,22 @@
+name: "SF Device Authenticate"
+
+description: "Authenticates to SF Environment by providing a Device Code for the user to manually authenticate with."
+
+inputs:
+  DEPLOY_USER:
+    required: true
+    description: "User with permission granted to connected app"
+  SF_INSTANCE_URL:
+    required: true
+    description: "The Salesforce environment to authenticate to"
+ 
+
+runs:
+  using: "composite"
+  steps:
+      - name: Authenticate to Salesforce using Device Authentication Flow
+        run: |
+          sf org login device \
+            --username ${{ inputs.DEPLOY_USER }} \
+            --instance-url ${{ inputs.SF_INSTANCE_URL }}
+        shell: bash
