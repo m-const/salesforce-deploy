@@ -11,18 +11,21 @@ inputs:
 outputs:
   SF_USERNAME:
     description: "SF Username to use for authentication."
-    value: ${{ steps.step1.outputs.username }}
+    value: ${{ steps.set-outputs.outputs.SF_USERNAME }}
   SF_URL:
     description: "SF URL to use for authentication."
-    value: ${{ steps.step1.outputs.sf_url }}
+    value: ${{ steps.set-outputs.outputs.SF_URL }}
   SF_CLIENT_ID:
     description: "SF CLIENT ID to use for authentication."
-    value: ${{ steps.step1.outputs.client_id }}
-  
+    value: ${{ steps.set-outputs.outputs.SF_CLIENT_ID }}
+  IS_JWT:
+    description: "Indecates if the auth values are for JWT auth method.  returns true or false"
+    value: ${{ steps.set-outputs.outputs.IS_JWT }}
 runs:
   using: "composite"
   steps:
     - name: Extract `SF_USERNAME` and `SF_URL`  and `SF_CLIENT_ID` from SF_AUTH Secret
+      id: set-outputs
       run: |
         
           echo "SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.SF_USERNAME -)" >> "$GITHUB_OUTPUT"
