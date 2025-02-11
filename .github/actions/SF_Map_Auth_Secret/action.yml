@@ -28,9 +28,9 @@ runs:
       id: set-outputs
       run: |
         
-          echo "SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.SF_USERNAME -)" >> "$GITHUB_OUTPUT"
-          echo "SF_URL=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.SF_URL -)" >> "$GITHUB_OUTPUT"
-          echo "SF_CLIENT_ID=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.SF_CLIENT_ID -)" >> "$GITHUB_OUTPUT"
+          echo "SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.username -)" >> "$GITHUB_OUTPUT"
+          echo "SF_URL=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.url -)" >> "$GITHUB_OUTPUT"
+          echo "SF_CLIENT_ID=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.client_id -)" >> "$GITHUB_OUTPUT"
          
           if [ -z "$SF_CLIENT_ID" ]; then
             echo "IS_JWT=true" >> "$GITHUB_OUTPUT"
