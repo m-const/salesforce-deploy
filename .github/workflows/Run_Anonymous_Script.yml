@@ -15,6 +15,10 @@ on:
         description: 'Second argument'
         required: false
         type: string
+      SF_INSTANCE_URL:
+        description: 'the target SF Org URL as noted in Setup > My Domain > My Domain Details > Current My Domain URL'
+        required: true
+        type: string
 
 jobs:
   sf-cli-prepare-runner:
@@ -44,7 +48,7 @@ jobs:
         with:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
+          SF_INSTANCE_URL: ${{ github.event.inputs.SF_INSTANCE_URL }}
           SF_JWT_KEY: ${{secrets.SF_JWT_KEY}}
 
       - name: Attempt Device Authenticate
