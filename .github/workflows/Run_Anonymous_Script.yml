@@ -56,7 +56,7 @@ jobs:
         uses: ./.github/actions/SF_Device_Authenticate
         with:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          SF_INSTANCE_URL: ${{ vars.SF_INSTANCE_URL }}
+          SF_INSTANCE_URL: ${{ github.event.inputs.SF_INSTANCE_URL }}
 
 
 
