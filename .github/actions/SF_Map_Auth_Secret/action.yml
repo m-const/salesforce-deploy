@@ -26,6 +26,8 @@ runs:
   steps:
     - name: Extract `SF_USERNAME` and `SF_URL`  and `SF_CLIENT_ID` from SF_AUTH Secret
       id: set-outputs
+      run: echo "SF_INSTANCE_KEY=$SF_INSTANCE_KEY"
+      run: echo "$SF_AUTH"
       run: |
         
           echo "SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.username -)" >> "$GITHUB_OUTPUT"
