@@ -26,7 +26,7 @@ runs:
   steps:
     - name: Decode YAML secret
       run: |
-        echo "${{ secrets.SF_AUTH }}" | base64 --decode > my_secret.yaml
+        echo "${{ inputs.SF_AUTH }}" | base64 --decode > my_secret.yaml
 
     - name: Extract `SF_USERNAME` and `SF_URL` and `SF_CLIENT_ID` from SF_AUTH Secret
       id: set-outputs
