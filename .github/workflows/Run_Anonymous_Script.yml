@@ -28,10 +28,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Var check
-        run: |
-          echo ${{ secrets.SF_AUTH }}
-          echo ${{ inputs.SF_INSTANCE_KEY }}
+      # - name: Var check
+      #   run: |
+      #     echo ${{ secrets.SF_AUTH }}
+      #     echo ${{ inputs.SF_INSTANCE_KEY }}
           
       - name: Install Node.js and npm
         uses: actions/setup-node@v3
