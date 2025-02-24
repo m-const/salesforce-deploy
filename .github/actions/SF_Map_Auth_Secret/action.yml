@@ -24,21 +24,31 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Extract `SF_USERNAME` and `SF_URL`  and `SF_CLIENT_ID` from SF_AUTH Secret
+    - name: Decode YAML secret
+      run: |
+        echo "${{ secrets.SF_AUTH }}" | base64 --decode > my_secret.yaml
+
+    - name: Extract `SF_USERNAME` and `SF_URL` and `SF_CLIENT_ID` from SF_AUTH Secret
       id: set-outputs
       run: |
-          echo "SF_INSTANCE_KEY=$SF_INSTANCE_KEY"
-          echo "$SF_AUTH"
-          SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.username -)
-          SF_URL=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.url -)
-          SF_CLIENT_ID=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.client_id -)
-          echo "SF_USERNAME=$SF_USERNAME" >> "$GITHUB_OUTPUT"
-          echo "SF_URL=$SF_URL" >> "$GITHUB_OUTPUT"
-          echo "SF_CLIENT_ID=$SF_CLIENT_ID" >> "$GITHUB_OUTPUT"
-         
-          if [ -n "$SF_CLIENT_ID" ]; then
-            echo "IS_JWT=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "IS_JWT=false" >> "$GITHUB_OUTPUT"
-          fi
+        SF_INSTANCE_KEY=${{ inputs.SF_INSTANCE_KEY }}
+        SF_AUTH=$(cat my_secret.yaml)
+        echo "SF_INSTANCE_KEY=$SF_INSTANCE_KEY"
+        echo "$SF_AUTH"
+        SF_USERNAME=$(echo "$SF_AUTH" | yq eval ".${SF_INSTANCE_KEY}.username" -)
+        SF_URL=$(echo "$SF_AUTH" | yq eval ".${SF_INSTANCE_KEY}.url" -)
+        SF_CLIENT_ID=$(echo "$SF_AUTH" | yq eval ".${SF_INSTANCE_KEY}.client_id" -)
+        echo "SF_USERNAME=$SF_USERNAME" >> "$GITHUB_OUTPUT"
+        echo "SF_URL=$SF_URL" >> "$GITHUB_OUTPUT"
+        echo "SF_CLIENT_ID=$SF_CLIENT_ID" >> "$GITHUB_OUTPUT"
+        
+        if [ -n "$SF_CLIENT_ID" ]; then
+          echo "IS_JWT=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "IS_JWT=false" >> "$GITHUB_OUTPUT"
+        fi
       shell: bash
+
+    - name: Delete decoded YAML file
+      run: |
+        rm my_secret.yaml
