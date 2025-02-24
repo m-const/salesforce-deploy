@@ -29,11 +29,14 @@ runs:
       run: |
           echo "SF_INSTANCE_KEY=$SF_INSTANCE_KEY"
           echo "$SF_AUTH"
-          echo "SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.username -)" >> "$GITHUB_OUTPUT"
-          echo "SF_URL=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.url -)" >> "$GITHUB_OUTPUT"
-          echo "SF_CLIENT_ID=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.client_id -)" >> "$GITHUB_OUTPUT"
+          SF_USERNAME=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.username -)
+          SF_URL=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.url -)
+          SF_CLIENT_ID=$(echo $SF_AUTH | yq eval .${SF_INSTANCE_KEY}.client_id -)
+          echo "SF_USERNAME=$SF_USERNAME" >> "$GITHUB_OUTPUT"
+          echo "SF_URL=$SF_URL" >> "$GITHUB_OUTPUT"
+          echo "SF_CLIENT_ID=$SF_CLIENT_ID" >> "$GITHUB_OUTPUT"
          
-          if [ -z "$SF_CLIENT_ID" ]; then
+          if [ -n "$SF_CLIENT_ID" ]; then
             echo "IS_JWT=true" >> "$GITHUB_OUTPUT"
           else
             echo "IS_JWT=false" >> "$GITHUB_OUTPUT"
