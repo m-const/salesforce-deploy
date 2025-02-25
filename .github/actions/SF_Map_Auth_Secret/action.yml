@@ -35,9 +35,9 @@ runs:
         SF_AUTH=$(cat my_secret.yaml)
         echo "SF_INSTANCE_KEY=$SF_INSTANCE_KEY"
         echo "$SF_AUTH"
-        SF_USERNAME=$(yq eval ".\"$SF_INSTANCE_KEY\".username" my_secret.yaml)
-        SF_URL=$(yq eval ".\"$SF_INSTANCE_KEY\".url" my_secret.yaml)
-        SF_CLIENT_ID=$(yq eval ".\"$SF_INSTANCE_KEY\".client_id" my_secret.yaml)
+        SF_USERNAME=$(yq eval '.[$SF_INSTANCE_KEY].username' my_secret.yaml)
+        SF_URL=$(yq eval '.[$SF_INSTANCE_KEY].url' my_secret.yaml)
+        SF_CLIENT_ID=$(yq eval '.[$SF_INSTANCE_KEY].client_id' my_secret.yaml)
         echo "SF_USERNAME=$SF_USERNAME" >> "$GITHUB_OUTPUT"
         echo "SF_URL=$SF_URL" >> "$GITHUB_OUTPUT"
         echo "SF_CLIENT_ID=$SF_CLIENT_ID" >> "$GITHUB_OUTPUT"
